@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  a:
+    build: gen-a/.
+    ports: 
+      - "8080:8080"
+    links:
+      - "b"
+      - "c"
+
+  b:
+    build: gen-b/.
+    links:
+      - "d"
+      - "e"
+
+  c:
+    build: gen-c/.
+    links:
+      - "e"
+  
+  d:
+    build: gen-d/.
+  
+  e:
+    build: gen-e/.
