@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: e
+  labels:
+    name: e
+spec:
+  replicas: 1
+  selector:
+    name: e
+  template:
+    metadata:
+      labels:
+        name: e
+    spec:
+      containers:
+      - name: e
+        image: my/e
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: e
+  labels:
+    name: e
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+  selector: 
+    name: e
