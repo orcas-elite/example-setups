@@ -7,7 +7,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +29,10 @@ public abstract class MicroserviceType {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Autowired
+	private Tracer jaegerTracer;
+
 	@RequestMapping(value = "/info", method = GET)
-	@HystrixCommand(fallbackMethod = "fallback")
 	public String getInfo() {
 	    return this.type;
 	}
@@ -36,13 +40,13 @@ public abstract class MicroserviceType {
 	@RequestMapping(value = "/h", method = GET)
 	@HystrixCommand(fallbackMethod = "fallback")
 	public ResponseEntity<String> h() {
-		
+		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
 		return new ResponseEntity<String>("Operation h executed successfully.", HttpStatus.OK);
 	}
 	@RequestMapping(value = "/i", method = GET)
 	@HystrixCommand(fallbackMethod = "fallback")
 	public ResponseEntity<String> i() {
-		
+		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
 		return new ResponseEntity<String>("Operation i executed successfully.", HttpStatus.OK);
 	}
 

@@ -11,6 +11,7 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +31,10 @@ public abstract class MicroserviceType {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Autowired
+	private Tracer jaegerTracer;
+
 	@RequestMapping(value = "/info", method = GET)
-	@HystrixCommand(fallbackMethod = "fallback")
 	public String getInfo() {
 	    return this.type;
 	}
@@ -41,15 +44,16 @@ public abstract class MicroserviceType {
 	public ResponseEntity<String> c() {
 			restTemplate.getForObject("http://d:8080/g", String.class);
 			restTemplate.getForObject("http://e:8080/h", String.class);
-			return new ResponseEntity<String>("Operation c executed successfully.", HttpStatus.OK);
+		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
+		return new ResponseEntity<String>("Operation c executed successfully.", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/d", method = GET)
 	@HystrixCommand(fallbackMethod = "fallback")
 	public ResponseEntity<String> d() {
-		
 	restTemplate.getForObject("http://e:8080/h", String.class);
-		return new ResponseEntity<String>("Operation d executed successfully.", HttpStatus.OK);
+	jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
+	return new ResponseEntity<String>("Operation d executed successfully.", HttpStatus.OK);
 	}
 
 	public ResponseEntity<String> fallback() {
