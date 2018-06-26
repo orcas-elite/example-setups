@@ -1,0 +1,160 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: a
+  labels:
+    app: a
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+    nodePort: 30100
+  selector: 
+    app: a
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: a
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: a
+    spec:
+      containers:
+      - name: a
+        image: orcaselite/schematic-abcde:gen-a
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: b
+  labels:
+    app: b
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+  selector: 
+    app: b
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: b
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: b
+    spec:
+      containers:
+      - name: b
+        image: orcaselite/schematic-abcde:gen-b
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: c
+  labels:
+    app: c
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+  selector: 
+    app: c
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: c
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: c
+    spec:
+      containers:
+      - name: c
+        image: orcaselite/schematic-abcde:gen-c
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: d
+  labels:
+    app: d
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+  selector: 
+    app: d
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: d
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: d
+    spec:
+      containers:
+      - name: d
+        image: orcaselite/schematic-abcde:gen-d
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: e
+  labels:
+    app: e
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+  selector: 
+    app: e
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: e
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: e
+    spec:
+      containers:
+      - name: e
+        image: orcaselite/schematic-abcde:gen-e
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
