@@ -73,9 +73,40 @@ public abstract class MicroserviceType {
 		return new ResponseEntity<String>("Operation a executed successfully.", HttpStatus.OK);
 	}
 	@RequestMapping(value = "/b", method = GET)
-	public ResponseEntity<String> b() {
+	public ResponseEntity<String> b(@RequestHeader(value="x-request-id", required=false) String xreq,
+			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
+            @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
+            @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
+            @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
+            @RequestHeader(value="x-b3-flags", required=false) String xflags,
+            @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
+		System.out.println("b rx");
+		System.out.println("x-request-id=" + xreq);
+		System.out.println("x-b3-traceid=" + xtraceid);
+		System.out.println("x-b3-spanid=" + xspanid);
+		System.out.println("x-b3-parentspanid=" + xparentspanid);
+		System.out.println("x-b3-sampled=" + xsampled);
+		System.out.println("x-b3-flags=" + xflags);
+		System.out.println("x-ot-span-context=" + xotspan);
 		
-	restTemplate.getForObject("http://c:8080/f", String.class);
+		HttpHeaders headers = new HttpHeaders();
+		if(xreq!=null)
+			headers.set("x-request-id", xreq);
+		if(xtraceid!=null)
+			headers.set("x-b3-traceid", xtraceid);
+		if(xspanid!=null)
+			headers.set("x-b3-spanid", xspanid);
+		if(xparentspanid!=null)
+			headers.set("x-b3-parentspanid", xparentspanid);
+		if(xsampled!=null)
+			headers.set("x-b3-sampled", xsampled);
+		if(xflags!=null)
+			headers.set("x-b3-flags", xflags);
+		if(xotspan!=null)
+			headers.set("x-ot-span-context", xotspan);
+		
+		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
+		restTemplate.exchange("http://c:8080/f", HttpMethod.GET, request, String.class);
 		return new ResponseEntity<String>("Operation b executed successfully.", HttpStatus.OK);
 	}
 }
