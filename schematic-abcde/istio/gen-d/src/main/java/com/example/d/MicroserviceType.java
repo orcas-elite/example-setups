@@ -31,15 +31,15 @@ public abstract class MicroserviceType {
 	    return this.type;
 	}
 	
-	@RequestMapping(value = "/g", method = GET)
-	public ResponseEntity<String> g(@RequestHeader(value="x-request-id", required=false) String xreq,
+	@RequestMapping(value = "/d1", method = GET)
+	public ResponseEntity<String> d1(@RequestHeader(value="x-request-id", required=false) String xreq,
 			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
             @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
             @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
             @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
             @RequestHeader(value="x-b3-flags", required=false) String xflags,
             @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
-		System.out.println("g rx");
+		System.out.println("d1 rx");
 		System.out.println("x-request-id=" + xreq);
 		System.out.println("x-b3-traceid=" + xtraceid);
 		System.out.println("x-b3-spanid=" + xspanid);
@@ -48,6 +48,6 @@ public abstract class MicroserviceType {
 		System.out.println("x-b3-flags=" + xflags);
 		System.out.println("x-ot-span-context=" + xotspan);
 		
-		return new ResponseEntity<String>("Operation g executed successfully.", HttpStatus.OK);
+		return new ResponseEntity<String>("Operation d1 executed successfully.", HttpStatus.OK);
 	}
 }

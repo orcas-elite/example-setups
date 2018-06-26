@@ -31,15 +31,15 @@ public abstract class MicroserviceType {
 	    return this.type;
 	}
 	
-	@RequestMapping(value = "/e", method = GET)
-	public ResponseEntity<String> e(@RequestHeader(value="x-request-id", required=false) String xreq,
+	@RequestMapping(value = "/c1", method = GET)
+	public ResponseEntity<String> c1(@RequestHeader(value="x-request-id", required=false) String xreq,
 			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
             @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
             @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
             @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
             @RequestHeader(value="x-b3-flags", required=false) String xflags,
             @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
-		System.out.println("e rx");
+		System.out.println("c1 rx");
 		System.out.println("x-request-id=" + xreq);
 		System.out.println("x-b3-traceid=" + xtraceid);
 		System.out.println("x-b3-spanid=" + xspanid);
@@ -65,18 +65,18 @@ public abstract class MicroserviceType {
 			headers.set("x-ot-span-context", xotspan);
 		
 		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		restTemplate.exchange("http://e:8080/i", HttpMethod.GET, request, String.class);
-		return new ResponseEntity<String>("Operation e executed successfully.", HttpStatus.OK);
+		restTemplate.exchange("http://e:8080/e2", HttpMethod.GET, request, String.class);
+		return new ResponseEntity<String>("Operation c1 executed successfully.", HttpStatus.OK);
 	}
-	@RequestMapping(value = "/f", method = GET)
-	public ResponseEntity<String> f(@RequestHeader(value="x-request-id", required=false) String xreq,
+	@RequestMapping(value = "/c2", method = GET)
+	public ResponseEntity<String> c2(@RequestHeader(value="x-request-id", required=false) String xreq,
 			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
             @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
             @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
             @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
             @RequestHeader(value="x-b3-flags", required=false) String xflags,
             @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
-		System.out.println("f rx");
+		System.out.println("c2 rx");
 		System.out.println("x-request-id=" + xreq);
 		System.out.println("x-b3-traceid=" + xtraceid);
 		System.out.println("x-b3-spanid=" + xspanid);
@@ -85,6 +85,6 @@ public abstract class MicroserviceType {
 		System.out.println("x-b3-flags=" + xflags);
 		System.out.println("x-ot-span-context=" + xotspan);
 		
-		return new ResponseEntity<String>("Operation f executed successfully.", HttpStatus.OK);
+		return new ResponseEntity<String>("Operation c2 executed successfully.", HttpStatus.OK);
 	}
 }
