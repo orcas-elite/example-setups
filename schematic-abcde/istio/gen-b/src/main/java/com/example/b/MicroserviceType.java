@@ -39,14 +39,6 @@ public abstract class MicroserviceType {
             @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
             @RequestHeader(value="x-b3-flags", required=false) String xflags,
             @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
-		System.out.println("b1 rx");
-		System.out.println("x-request-id=" + xreq);
-		System.out.println("x-b3-traceid=" + xtraceid);
-		System.out.println("x-b3-spanid=" + xspanid);
-		System.out.println("x-b3-parentspanid=" + xparentspanid);
-		System.out.println("x-b3-sampled=" + xsampled);
-		System.out.println("x-b3-flags=" + xflags);
-		System.out.println("x-ot-span-context=" + xotspan);
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("x-request-id", xreq);
@@ -70,14 +62,6 @@ public abstract class MicroserviceType {
             @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
             @RequestHeader(value="x-b3-flags", required=false) String xflags,
             @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
-		System.out.println("b2 rx");
-		System.out.println("x-request-id=" + xreq);
-		System.out.println("x-b3-traceid=" + xtraceid);
-		System.out.println("x-b3-spanid=" + xspanid);
-		System.out.println("x-b3-parentspanid=" + xparentspanid);
-		System.out.println("x-b3-sampled=" + xsampled);
-		System.out.println("x-b3-flags=" + xflags);
-		System.out.println("x-ot-span-context=" + xotspan);
 		
 		HttpHeaders headers = new HttpHeaders();
 		if(xreq!=null)
