@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: c-timeout
+spec:
+  hosts:
+  - c
+  http:
+  - match:
+    - uri:
+        prefix: "/c1"
+    route:
+    - destination:
+        host: c
+    timeout: 1s
+  - match:
+    - uri:
+        prefix: "/c2"
+    route:
+    - destination:
+        host: c
