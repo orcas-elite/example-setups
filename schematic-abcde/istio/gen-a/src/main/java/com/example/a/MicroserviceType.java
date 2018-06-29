@@ -55,14 +55,24 @@ public abstract class MicroserviceType {
 			headers.set("x-b3-flags", xflags);
 		if(xotspan!=null)
 			headers.set("x-ot-span-context", xotspan);
-		
 		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		restTemplate.exchange("http://b:8080/b1", HttpMethod.GET, request, String.class);
-		restTemplate.exchange("http://c:8080/c1", HttpMethod.GET, request, String.class);
+
+		ResponseEntity<String> responseB1, responseC1;
+		String responseB1Str, responseC1Str;
+		try {
+			responseB1 = restTemplate.exchange("http://b:8080/b1", HttpMethod.GET, request, String.class);
+			responseB1Str = responseB1.getBody();
+		} catch (Exception e) {
+			responseB1Str = "Operation b1 failed";
+		}
+		try {
+			responseC1 = restTemplate.exchange("http://c:8080/c1", HttpMethod.GET, request, String.class);
+			responseC1Str = responseC1.getBody();
+		} catch (Exception e) {
+			responseC1Str = "Operation c1 failed";
+		}
 		
-//	restTemplate.getForObject("http://b:8080/c", String.class);
-//	restTemplate.getForObject("http://c:8080/e", String.class);
-		return new ResponseEntity<String>("Operation a1 executed successfully.", HttpStatus.OK);
+		return new ResponseEntity<String>(responseB1Str + "<br>" + responseC1Str + "<br>Operation a1 executed successfully.", HttpStatus.OK);
 	}
 	@RequestMapping(value = "/a2", method = GET)
 	public ResponseEntity<String> a2(@RequestHeader(value="x-request-id", required=false) String xreq,
@@ -88,9 +98,17 @@ public abstract class MicroserviceType {
 			headers.set("x-b3-flags", xflags);
 		if(xotspan!=null)
 			headers.set("x-ot-span-context", xotspan);
-		
 		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		restTemplate.exchange("http://c:8080/c2", HttpMethod.GET, request, String.class);
-		return new ResponseEntity<String>("Operation a2 executed successfully.", HttpStatus.OK);
+
+		ResponseEntity<String> responseC2;
+		String responseC2Str;
+
+		try {
+			responseC2 = restTemplate.exchange("http://c:8080/c2", HttpMethod.GET, request, String.class);
+			responseC2Str = responseC2.getBody();
+		} catch (Exception e) {
+			responseC2Str = "Operation c2 failed";
+		}
+		return new ResponseEntity<String>(responseC2Str + "<br>Operation a2 executed successfully.", HttpStatus.OK);
 	}
 }

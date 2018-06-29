@@ -48,11 +48,23 @@ public abstract class MicroserviceType {
 		headers.set("x-b3-sampled", xsampled);
 		headers.set("x-b3-flags", xflags);
 		headers.set("x-ot-span-context", xotspan);
-		
 		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		restTemplate.exchange("http://d:8080/d1", HttpMethod.GET, request, String.class);
-		restTemplate.exchange("http://e:8080/e1", HttpMethod.GET, request, String.class);
-		return new ResponseEntity<String>("Operation b1 executed successfully.", HttpStatus.OK);
+
+		ResponseEntity<String> responseD1, responseE1;
+		String responseD1Str, responseE1Str;
+		try {
+			responseD1 = restTemplate.exchange("http://d:8080/d1", HttpMethod.GET, request, String.class);
+			responseD1Str = responseD1.getBody();
+		} catch (Exception e) {
+			responseD1Str = "Operation d1 failed";
+		}
+		try {
+			responseE1 = restTemplate.exchange("http://e:8080/e1", HttpMethod.GET, request, String.class);
+			responseE1Str = responseE1.getBody();
+		} catch (Exception e) {
+			responseE1Str = "Operation e1 failed";
+		}
+		return new ResponseEntity<String>(responseD1Str + "<br>" + responseE1Str + "<br>Operation b1 executed successfully.", HttpStatus.OK);
 	}
 	@RequestMapping(value = "/b2", method = GET)
 	public ResponseEntity<String> b2(@RequestHeader(value="x-request-id", required=false) String xreq,
@@ -78,9 +90,17 @@ public abstract class MicroserviceType {
 			headers.set("x-b3-flags", xflags);
 		if(xotspan!=null)
 			headers.set("x-ot-span-context", xotspan);
-		
 		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		restTemplate.exchange("http://e:8080/e1", HttpMethod.GET, request, String.class);
-		return new ResponseEntity<String>("Operation b2 executed successfully.", HttpStatus.OK);
+
+		ResponseEntity<String> responseE1;
+		String responseE1Str;
+
+		try {
+			responseE1 = restTemplate.exchange("http://e:8080/e1", HttpMethod.GET, request, String.class);
+			responseE1Str = responseE1.getBody();
+		} catch (Exception e) {
+			responseE1Str = "Operation e1 failed";
+		}
+		return new ResponseEntity<String>(responseE1Str + "<br>Operation b2 executed successfully.", HttpStatus.OK);
 	}
 }
