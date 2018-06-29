@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: e-route
+spec:
+  hosts:
+  - e
+  http:
+  - fault:
+      abort:
+        percent: 100
+        httpStatus: 502
+    match:
+    - uri:
+        prefix: "/e2"
+    route:
+    - destination:
+        host: e
+  - route:
+    - destination:
+        host: e
