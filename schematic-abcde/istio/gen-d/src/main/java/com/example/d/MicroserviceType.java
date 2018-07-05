@@ -34,12 +34,31 @@ public abstract class MicroserviceType {
 	@RequestMapping(value = "/d1", method = GET)
 	public ResponseEntity<String> d1(@RequestHeader(value="x-request-id", required=false) String xreq,
 			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
-            @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
-            @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
-            @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
-            @RequestHeader(value="x-b3-flags", required=false) String xflags,
-            @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
+			@RequestHeader(value="x-b3-spanid", required=false) String xspanid,
+			@RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
+			@RequestHeader(value="x-b3-sampled", required=false) String xsampled,
+			@RequestHeader(value="x-b3-flags", required=false) String xflags,
+			@RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
+
+		HttpHeaders headers = new HttpHeaders();
+		if(xreq!=null)
+			headers.set("x-request-id", xreq);
+		if(xtraceid!=null)
+			headers.set("x-b3-traceid", xtraceid);
+		if(xspanid!=null)
+			headers.set("x-b3-spanid", xspanid);
+		if(xparentspanid!=null)
+			headers.set("x-b3-parentspanid", xparentspanid);
+		if(xsampled!=null)
+			headers.set("x-b3-sampled", xsampled);
+		if(xflags!=null)
+			headers.set("x-b3-flags", xflags);
+		if(xotspan!=null)
+			headers.set("x-ot-span-context", xotspan);
+		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
 		
-		return new ResponseEntity<String>("Operation d1 executed successfully.", HttpStatus.OK);
+		String returnStr = "";
+		returnStr += "<br>Operation d/d1 executed successfully.";
+		return new ResponseEntity<String>(returnStr, HttpStatus.OK);
 	}
 }
