@@ -11,9 +11,9 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
-import microserviceMetamodel.xtend.EnvironmentGeneratorVanilla;
 import microserviceMetamodel.AnotherMicroserviceMetamodelPackage;
 import microserviceMetamodel.impl.MetaModelStructureImpl;
+import microserviceMetamodel.xtend.EnvironmentGenerator;
 
 public class GenerateEnvironment {
 	public static void main(String[] args) throws IOException {
@@ -28,6 +28,6 @@ public class GenerateEnvironment {
 		resourceSet.getPackageRegistry().put(epackage[0].getNsURI(), AnotherMicroserviceMetamodelPackage.eINSTANCE);
 		resource.load(null);
 		MetaModelStructureImpl mmsi = (MetaModelStructureImpl) resource.getContents().get(0);
-		new EnvironmentGeneratorVanilla(new File("env-schematicabcde"), mmsi);
-        }
+		new EnvironmentGenerator(new File("env-chaos"), mmsi);
+	}
 }

@@ -125,11 +125,11 @@
         identifier="a"
         dependencies="//@dependencies/@operationToOperationCallingDependencies.0 //@dependencies/@operationToOperationCallingDependencies.1 //@dependencies/@operationToOperationCallingDependencies.2">
       <restOperations
-          name="a"
-          subPath="/a"/>
+          name="a1"
+          subPath="/a1"/>
       <restOperations
-          name="b"
-          subPath="/b"/>
+          name="a2"
+          subPath="/a2"/>
       <versions
           versionString="1.0"/>
     </microserviceTypes>
@@ -138,11 +138,11 @@
         identifier="b"
         dependencies="//@dependencies/@operationToOperationCallingDependencies.3 //@dependencies/@operationToOperationCallingDependencies.4 //@dependencies/@operationToOperationCallingDependencies.5">
       <restOperations
-          name="c"
-          subPath="/c"/>
+          name="b1"
+          subPath="/b1"/>
       <restOperations
-          name="d"
-          subPath="/d"/>
+          name="b2"
+          subPath="/b2"/>
       <versions
           versionString="2.0"/>
     </microserviceTypes>
@@ -151,11 +151,11 @@
         identifier="c"
         dependencies="//@dependencies/@operationToOperationCallingDependencies.6">
       <restOperations
-          name="e"
-          subPath="/e"/>
+          name="c1"
+          subPath="/c1"/>
       <restOperations
-          name="f"
-          subPath="/f"/>
+          name="c2"
+          subPath="/c2"/>
       <versions
           versionString="3.0"/>
     </microserviceTypes>
@@ -163,8 +163,8 @@
         microservices="//@configurations.0/@microservices.3"
         identifier="d">
       <restOperations
-          name="g"
-          subPath="/g"/>
+          name="d1"
+          subPath="/d1"/>
       <versions
           versionString="4.0"/>
     </microserviceTypes>
@@ -172,11 +172,11 @@
         microservices="//@configurations.0/@microservices.4"
         identifier="e">
       <restOperations
-          name="h"
-          subPath="/h"/>
+          name="e1"
+          subPath="/e1"/>
       <restOperations
-          name="i"
-          subPath="/i"/>
+          name="e2"
+          subPath="/e2"/>
       <versions
           versionString="5.0"/>
     </microserviceTypes>

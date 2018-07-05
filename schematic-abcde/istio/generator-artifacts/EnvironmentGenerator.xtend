@@ -10,7 +10,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
 
-class EnvironmentGeneratorVanilla {
+class EnvironmentGenerator {
 
 	private File basePath;
 	private MetaModelStructure mms;
@@ -97,8 +97,12 @@ class EnvironmentGeneratorVanilla {
 		import java.util.Collections;
 		import java.util.List;
 		
+		import org.springframework.http.HttpEntity;
+		import org.springframework.http.HttpHeaders;
+		import org.springframework.http.HttpMethod;
 		import org.springframework.http.HttpStatus;
 		import org.springframework.http.ResponseEntity;
+		import org.springframework.web.bind.annotation.RequestHeader;
 		import org.springframework.web.bind.annotation.RequestMapping;
 		import org.springframework.web.client.RestTemplate;
 		
@@ -120,16 +124,55 @@ class EnvironmentGeneratorVanilla {
 			
 			«FOR operation : mst.restOperations»
 				@RequestMapping(value = "«operation.subPath»", method = «operation.restVerb.toString»)
-				public ResponseEntity<String> «operation.name»() {
+				public ResponseEntity<String> «operation.name»(@RequestHeader(value="x-request-id", required=false) String xreq,
+						@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
+						@RequestHeader(value="x-b3-spanid", required=false) String xspanid,
+						@RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
+						@RequestHeader(value="x-b3-sampled", required=false) String xsampled,
+						@RequestHeader(value="x-b3-flags", required=false) String xflags,
+						@RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
+
+					HttpHeaders headers = new HttpHeaders();
+					if(xreq!=null)
+						headers.set("x-request-id", xreq);
+					if(xtraceid!=null)
+						headers.set("x-b3-traceid", xtraceid);
+					if(xspanid!=null)
+						headers.set("x-b3-spanid", xspanid);
+					if(xparentspanid!=null)
+						headers.set("x-b3-parentspanid", xparentspanid);
+					if(xsampled!=null)
+						headers.set("x-b3-sampled", xsampled);
+					if(xflags!=null)
+						headers.set("x-b3-flags", xflags);
+					if(xotspan!=null)
+						headers.set("x-ot-span-context", xotspan);
+					HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
 					
 				«FOR OperationToOperationCallingDependency otocd : mst.dependencies»
 					«IF otocd.callingOperation.name == operation.name»
 						«IF otocd.callingVersion == ms.version»					
-							restTemplate.getForObject("http://«otocd.calledMicroservice.identifier»:8080«otocd.calledOperation.subPath»", String.class);
-						«ENDIF»
+						ResponseEntity<String> response«otocd.calledMicroservice.identifier»;
+				String response«otocd.calledMicroservice.identifier»Str;
+				try {
+					response«otocd.calledMicroservice.identifier» = restTemplate.exchange("http://«otocd.calledMicroservice.identifier»:8080«otocd.calledOperation.subPath»", HttpMethod.GET, request, String.class);
+					response«otocd.calledMicroservice.identifier»Str = response«otocd.calledMicroservice.identifier».getBody();
+				} catch (Exception e) {
+					response«otocd.calledMicroservice.identifier»Str = "Operation «otocd.calledMicroservice.identifier»«otocd.calledOperation.subPath» failed";
+				}
+				«ENDIF»
 					«ENDIF»
-				«ENDFOR»
-					return new ResponseEntity<String>("Operation «operation.name» executed successfully.", HttpStatus.OK);
+					«ENDFOR»
+					String returnStr = "";
+				«FOR OperationToOperationCallingDependency otocd : mst.dependencies»
+					«IF otocd.callingOperation.name == operation.name»
+					«IF otocd.callingVersion == ms.version»					
+					returnStr += response«otocd.calledMicroservice.identifier»Str + "<br>";
+				«ENDIF»
+					«ENDIF»
+					«ENDFOR»
+					returnStr += "<br>Operation «mst.identifier»/«operation.name» executed successfully.";
+					return new ResponseEntity<String>(returnStr, HttpStatus.OK);
 				}
 			«ENDFOR»
 		}
