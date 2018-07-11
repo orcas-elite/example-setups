@@ -16,11 +16,30 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
+  name: abcde
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - abcde-gateway
+  http:
+  - match:
+    - uri:
+        exact: /a1
+    - uri:
+        exact: /a2
+    route:
+    - destination:
+        host: a
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
   name: a
 spec:
   hosts:
-  - a
-  gateways:
   - a
   http:
   - route:
