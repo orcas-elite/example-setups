@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -28,9 +29,9 @@ public abstract class MicroserviceType {
 
 	@RequestMapping(value = "/info", method = GET)
 	public String getInfo() {
-	    return this.type;
+		return this.type;
 	}
-	
+
 	@RequestMapping(value = "/e1", method = GET)
 	public ResponseEntity<String> e1(@RequestHeader(value="x-request-id", required=false) String xreq,
 			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
@@ -40,26 +41,35 @@ public abstract class MicroserviceType {
 			@RequestHeader(value="x-b3-flags", required=false) String xflags,
 			@RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
 
-		HttpHeaders headers = new HttpHeaders();
-		if(xreq!=null)
-			headers.set("x-request-id", xreq);
-		if(xtraceid!=null)
-			headers.set("x-b3-traceid", xtraceid);
-		if(xspanid!=null)
-			headers.set("x-b3-spanid", xspanid);
-		if(xparentspanid!=null)
-			headers.set("x-b3-parentspanid", xparentspanid);
-		if(xsampled!=null)
-			headers.set("x-b3-sampled", xsampled);
-		if(xflags!=null)
-			headers.set("x-b3-flags", xflags);
-		if(xotspan!=null)
-			headers.set("x-ot-span-context", xotspan);
-		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		
-		String returnStr = "";
-		returnStr += "<br>Operation e/e1 executed successfully.";
-		return new ResponseEntity<String>(returnStr, HttpStatus.OK);
+			HttpHeaders headers = new HttpHeaders();
+			if(xreq!=null)
+				headers.set("x-request-id", xreq);
+			if(xtraceid!=null)
+				headers.set("x-b3-traceid", xtraceid);
+			if(xspanid!=null)
+				headers.set("x-b3-spanid", xspanid);
+			if(xparentspanid!=null)
+				headers.set("x-b3-parentspanid", xparentspanid);
+			if(xsampled!=null)
+				headers.set("x-b3-sampled", xsampled);
+			if(xflags!=null)
+				headers.set("x-b3-flags", xflags);
+			if(xotspan!=null)
+				headers.set("x-ot-span-context", xotspan);
+			HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
+
+			ResponseEntity<String> responsef;
+			String responsefStr;
+			try {
+				responsef = restTemplate.exchange("http://f:8080/f1", HttpMethod.GET, request, String.class);
+				responsefStr = responsef.getBody();
+			} catch (Exception e) {
+				responsefStr = "Operation f/f1 failed";
+			}
+			String returnStr = "";
+			returnStr += responsefStr + "<br>";
+			returnStr += "<br>Operation e/e1 executed successfully.";
+			return new ResponseEntity<String>(returnStr, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/e2", method = GET)
 	public ResponseEntity<String> e2(@RequestHeader(value="x-request-id", required=false) String xreq,
@@ -70,25 +80,37 @@ public abstract class MicroserviceType {
 			@RequestHeader(value="x-b3-flags", required=false) String xflags,
 			@RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
 
-		HttpHeaders headers = new HttpHeaders();
-		if(xreq!=null)
-			headers.set("x-request-id", xreq);
-		if(xtraceid!=null)
-			headers.set("x-b3-traceid", xtraceid);
-		if(xspanid!=null)
-			headers.set("x-b3-spanid", xspanid);
-		if(xparentspanid!=null)
-			headers.set("x-b3-parentspanid", xparentspanid);
-		if(xsampled!=null)
-			headers.set("x-b3-sampled", xsampled);
-		if(xflags!=null)
-			headers.set("x-b3-flags", xflags);
-		if(xotspan!=null)
-			headers.set("x-ot-span-context", xotspan);
-		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		
-		String returnStr = "";
-		returnStr += "<br>Operation e/e2 executed successfully.";
-		return new ResponseEntity<String>(returnStr, HttpStatus.OK);
+			HttpHeaders headers = new HttpHeaders();
+			if(xreq!=null)
+				headers.set("x-request-id", xreq);
+			if(xtraceid!=null)
+				headers.set("x-b3-traceid", xtraceid);
+			if(xspanid!=null)
+				headers.set("x-b3-spanid", xspanid);
+			if(xparentspanid!=null)
+				headers.set("x-b3-parentspanid", xparentspanid);
+			if(xsampled!=null)
+				headers.set("x-b3-sampled", xsampled);
+			if(xflags!=null)
+				headers.set("x-b3-flags", xflags);
+			if(xotspan!=null)
+				headers.set("x-ot-span-context", xotspan);
+			HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
+
+			ResponseEntity<String> responsef;
+			String responsefStr;
+			HttpStatus responseStatusCode = HttpStatus.OK;
+			try {
+				responsef = restTemplate.exchange("http://f:8080/f2", HttpMethod.GET, request, String.class);
+				responsefStr = responsef.getBody();
+				responseStatusCode = responsef.getStatusCode();
+			} catch (RestClientResponseException e) {
+				responsefStr = "Operation f/f2 failed";
+				responseStatusCode = HttpStatus.valueOf(e.getRawStatusCode());
+			}
+			String returnStr = "";
+			returnStr += responsefStr + "<br>";
+			returnStr += "<br>Operation e/e2 executed successfully.";
+			return new ResponseEntity<String>(returnStr, responseStatusCode);
 	}
 }
