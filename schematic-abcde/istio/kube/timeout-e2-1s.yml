@@ -6,16 +6,13 @@ spec:
   hosts:
   - e
   http:
-  - fault:
-      delay:
-        percent: 100
-        fixedDelay: 3s
-    match:
+  - match:
     - uri:
         prefix: "/e2"
     route:
     - destination:
         host: e
+    timeout: 1s
   - route:
     - destination:
         host: e

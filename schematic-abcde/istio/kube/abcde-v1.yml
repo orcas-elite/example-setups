@@ -16,13 +16,14 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: a
+  name: a-v1
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: a
+        version: v1
     spec:
       containers:
       - name: a
@@ -48,13 +49,14 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: b
+  name: b-v1
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: b
+        version: v1
     spec:
       containers:
       - name: b
@@ -80,13 +82,14 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: c
+  name: c-v1
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: c
+        version: v1
     spec:
       containers:
       - name: c
@@ -112,13 +115,14 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: d
+  name: d-v1
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: d
+        version: v1
     spec:
       containers:
       - name: d
@@ -144,17 +148,51 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: e
+  name: e-v1
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: e
+        version: v1
     spec:
       containers:
       - name: e
         image: orcaselite/schematic-abcde:gen-e
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: f
+  labels:
+    app: f
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+  selector: 
+    app: f
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: f-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: f
+        version: v1
+    spec:
+      containers:
+      - name: f
+        image: orcaselite/schematic-abcde:gen-f
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
