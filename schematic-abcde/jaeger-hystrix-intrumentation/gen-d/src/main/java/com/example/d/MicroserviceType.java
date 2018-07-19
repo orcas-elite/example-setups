@@ -24,7 +24,6 @@ public abstract class MicroserviceType {
 	protected String type = "d";
 	protected String version = "1.0.0";
 	protected static String uuid = java.util.UUID.randomUUID().toString();
-//	private RestTemplate restTemplate = new RestTemplate();
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -37,10 +36,8 @@ public abstract class MicroserviceType {
 	    return this.type;
 	}
 	
-	@RequestMapping(value = "/g", method = GET)
-	@HystrixCommand(fallbackMethod = "fallback")
-	public ResponseEntity<String> g() {
-		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
+	@RequestMapping(value = "/d1", method = GET)
+	public ResponseEntity<String> d1() {
 		return new ResponseEntity<String>("Operation g executed successfully.", HttpStatus.OK);
 	}
 

@@ -31,13 +31,13 @@ public abstract class MicroserviceType {
 	    return this.type;
 	}
 	
-	@RequestMapping(value = "/h", method = GET)
-	public ResponseEntity<String> h() {
+	@RequestMapping(value = "/e1", method = GET)
+	public ResponseEntity<String> e1() {
 		
 		return new ResponseEntity<String>("Operation h executed successfully.", HttpStatus.OK);
 	}
-	@RequestMapping(value = "/i", method = GET)
-	public ResponseEntity<String> i() {
+	@RequestMapping(value = "/e2", method = GET)
+	public ResponseEntity<String> e2() {
 		
 		return new ResponseEntity<String>("Operation i executed successfully.", HttpStatus.OK);
 	}

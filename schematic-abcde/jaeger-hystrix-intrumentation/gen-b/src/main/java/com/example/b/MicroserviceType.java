@@ -23,40 +23,44 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
 public abstract class MicroserviceType {
-	protected String type = "b";
-	protected String version = "1.0.0";
-	protected static String uuid = java.util.UUID.randomUUID().toString();
+    protected String type = "b";
+    protected String version = "1.0.0";
+    protected static String uuid = java.util.UUID.randomUUID().toString();
 //	private RestTemplate restTemplate = new RestTemplate();
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	@Autowired
-	private Tracer jaegerTracer;
+    @Autowired
+    private Tracer jaegerTracer;
 
-	@RequestMapping(value = "/info", method = GET)
-	public String getInfo() {
-	    return this.type;
-	}
-	
-	@RequestMapping(value = "/c", method = GET)
-	@HystrixCommand(fallbackMethod = "fallback")
-	public ResponseEntity<String> c() {
-			restTemplate.getForObject("http://d:8080/g", String.class);
-			restTemplate.getForObject("http://e:8080/h", String.class);
-		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
-		return new ResponseEntity<String>("Operation c executed successfully.", HttpStatus.OK);
-	}
+    @RequestMapping(value = "/info", method = GET)
+    public String getInfo() {
+        return this.type;
+    }
 
-	@RequestMapping(value = "/d", method = GET)
-	@HystrixCommand(fallbackMethod = "fallback")
-	public ResponseEntity<String> d() {
-	restTemplate.getForObject("http://e:8080/h", String.class);
-	jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
-	return new ResponseEntity<String>("Operation d executed successfully.", HttpStatus.OK);
-	}
+    @RequestMapping(value = "/b1", method = GET)
+    @HystrixCommand(fallbackMethod = "fallback")
+    public ResponseEntity<String> b1() {
+        jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
+        jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", true);
+        restTemplate.getForObject("http://d:8080/d1", String.class);
+        restTemplate.getForObject("http://e:8080/e1", String.class);
+        jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", false);
+        return new ResponseEntity<String>("Operation c executed successfully.", HttpStatus.OK);
+    }
 
-	public ResponseEntity<String> fallback() {
-		return new ResponseEntity<String>("Fallback", HttpStatus.OK);
-	}
+    @RequestMapping(value = "/b2", method = GET)
+    @HystrixCommand(fallbackMethod = "fallback")
+    public ResponseEntity<String> b2() {
+        jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
+        jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", true);
+        restTemplate.getForObject("http://e:8080/e1", String.class);
+        jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", false);
+        return new ResponseEntity<String>("Operation d executed successfully.", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> fallback() {
+        return new ResponseEntity<String>("Fallback", HttpStatus.OK);
+    }
 }

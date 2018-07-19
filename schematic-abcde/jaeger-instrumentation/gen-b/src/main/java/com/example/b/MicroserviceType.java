@@ -34,17 +34,17 @@ public abstract class MicroserviceType {
 	    return this.type;
 	}
 	
-	@RequestMapping(value = "/c", method = GET)
-	public ResponseEntity<String> c() {
-			restTemplate.getForObject("http://d:8080/g", String.class);
-			restTemplate.getForObject("http://e:8080/h", String.class);
+	@RequestMapping(value = "/b1", method = GET)
+	public ResponseEntity<String> b1() {
+			restTemplate.getForObject("http://d:8080/d1", String.class);
+			restTemplate.getForObject("http://e:8080/e1", String.class);
 			return new ResponseEntity<String>("Operation c executed successfully.", HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/d", method = GET)
-	public ResponseEntity<String> d() {
+	@RequestMapping(value = "/b2", method = GET)
+	public ResponseEntity<String> b2() {
 		
-	restTemplate.getForObject("http://e:8080/h", String.class);
+	restTemplate.getForObject("http://e:8080/e1", String.class);
 		return new ResponseEntity<String>("Operation d executed successfully.", HttpStatus.OK);
 	}
 }

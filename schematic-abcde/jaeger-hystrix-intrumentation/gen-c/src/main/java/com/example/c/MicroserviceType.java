@@ -38,20 +38,18 @@ public abstract class MicroserviceType {
 	    return this.type;
 	}
 	
-	@RequestMapping(value = "/e", method = GET)
+	@RequestMapping(value = "/c1", method = GET)
 	@HystrixCommand(fallbackMethod = "fallback")
-	public ResponseEntity<String> e() {
-		restTemplate.getForObject("http://e:8080/i", String.class);
-
+	public ResponseEntity<String> c1() {
 		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
-
+		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", true);
+		restTemplate.getForObject("http://e:8080/e2", String.class);
+		jaegerTracer.activeSpan().setTag("patter.circuitBreaker.fallback", false);
 		return new ResponseEntity<String>("Operation e executed successfully.", HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/f", method = GET)
-	@HystrixCommand(fallbackMethod = "fallback")
-	public ResponseEntity<String> f() {
-		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
+	@RequestMapping(value = "/c2", method = GET)
+	public ResponseEntity<String> c2() {
 		return new ResponseEntity<String>("Operation f executed successfully.", HttpStatus.OK);
 	}
 

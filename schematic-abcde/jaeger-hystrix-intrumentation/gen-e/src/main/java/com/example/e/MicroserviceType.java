@@ -21,36 +21,32 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
 public abstract class MicroserviceType {
-	protected String type = "e";
-	protected String version = "1.0.0";
-	protected static String uuid = java.util.UUID.randomUUID().toString();
-//	private RestTemplate restTemplate = new RestTemplate();
+    protected String type = "e";
+    protected String version = "1.0.0";
+    protected static String uuid = java.util.UUID.randomUUID().toString();
 
-	@Autowired
-	private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
-	@Autowired
-	private Tracer jaegerTracer;
+    @Autowired
+    private Tracer jaegerTracer;
 
-	@RequestMapping(value = "/info", method = GET)
-	public String getInfo() {
-	    return this.type;
-	}
-	
-	@RequestMapping(value = "/h", method = GET)
-	@HystrixCommand(fallbackMethod = "fallback")
-	public ResponseEntity<String> h() {
-		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
-		return new ResponseEntity<String>("Operation h executed successfully.", HttpStatus.OK);
-	}
-	@RequestMapping(value = "/i", method = GET)
-	@HystrixCommand(fallbackMethod = "fallback")
-	public ResponseEntity<String> i() {
-		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
-		return new ResponseEntity<String>("Operation i executed successfully.", HttpStatus.OK);
-	}
+    @RequestMapping(value = "/info", method = GET)
+    public String getInfo() {
+        return this.type;
+    }
 
-	public ResponseEntity<String> fallback() {
-		return new ResponseEntity<String>("fallback", HttpStatus.OK);
-	}
+    @RequestMapping(value = "/e1", method = GET)
+    public ResponseEntity<String> e1() {
+        return new ResponseEntity<String>("Operation h executed successfully.", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/e2", method = GET)
+    public ResponseEntity<String> e2() {
+        return new ResponseEntity<String>("Operation i executed successfully.", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> fallback() {
+        return new ResponseEntity<String>("fallback", HttpStatus.OK);
+    }
 }

@@ -31,8 +31,8 @@ public abstract class MicroserviceType {
 	    return this.type;
 	}
 	
-	@RequestMapping(value = "/g", method = GET)
-	public ResponseEntity<String> g() {
+	@RequestMapping(value = "/d1", method = GET)
+	public ResponseEntity<String> d1() {
 		
 		return new ResponseEntity<String>("Operation g executed successfully.", HttpStatus.OK);
 	}
