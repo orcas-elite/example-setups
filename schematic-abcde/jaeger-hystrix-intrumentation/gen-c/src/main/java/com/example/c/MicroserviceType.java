@@ -43,7 +43,7 @@ public abstract class MicroserviceType {
 	public ResponseEntity<String> c1() {
 		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
 		jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", true);
-		restTemplate.getForObject("http://e:8080/e2", String.class);
+		restTemplate.getForObject("http://lbe:80/e2", String.class);
 		jaegerTracer.activeSpan().setTag("patter.circuitBreaker.fallback", false);
 		return new ResponseEntity<String>("Operation e executed successfully.", HttpStatus.OK);
 	}

@@ -32,8 +32,8 @@ public abstract class MicroserviceType {
     public ResponseEntity<String> a1() {
         jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
         jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", true);
-        restTemplate.getForObject("http://b:8080/b1", String.class);
-        restTemplate.getForObject("http://c:8080/c1", String.class);
+        restTemplate.getForObject("http://lbb:80/b1", String.class);
+        restTemplate.getForObject("http://lbc:80/c1", String.class);
         jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", false);
         return new ResponseEntity<String>("Operation a executed successfully.", HttpStatus.OK);
     }
@@ -43,15 +43,13 @@ public abstract class MicroserviceType {
     public ResponseEntity<String> a2() {
         jaegerTracer.activeSpan().setTag("pattern.circuitBreaker", true);
         jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", true);
-        restTemplate.getForObject("http://c:8080/c2", String.class);
+        restTemplate.getForObject("http://lbc:80/c2", String.class);
         jaegerTracer.activeSpan().setTag("pattern.circuitBreaker.fallback", false);
         return new ResponseEntity<String>("Operation b executed successfully.", HttpStatus.OK);
     }
 
     public ResponseEntity<String> fallback() {
-        jaegerTracer.buildSpan("fallbackMethod").asChildOf(jaegerTracer.activeSpan()).startActive(true);
         ResponseEntity<String> response = new ResponseEntity<String>("Fallback", HttpStatus.OK);
-        jaegerTracer.activeSpan().finish();
         return response;
     }
 }

@@ -1,4 +1,4 @@
-version: '2'
+version: '2.2'
 
 services:
   jaeger: 
@@ -12,10 +12,20 @@ services:
       - "14268:14268"
       - "9411:9411"
 
+  lba:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - a
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   a:
     build: gen-a/.
     ports: 
-      - "8080:8080"
+      - 8080
+    scale: 1
     environment:
       - JAEGER_SERVICE_NAME=A
       - JAEGER_AGENT_HOST=jaeger
@@ -24,11 +34,19 @@ services:
       - JAEGER_REPORTER_MAX_QUEUE_SIZE=10000 
       - JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger:5778
     links:
-      - "b"
-      - "c"
+      - lbb
+      - lbc
+
+  lbb:
+    image: dockercloud/haproxy
+    links:
+      - b
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   b:
     build: gen-b/.
+    scale: 1
     environment:
       - JAEGER_SERVICE_NAME=B
       - JAEGER_AGENT_HOST=jaeger
@@ -37,11 +55,19 @@ services:
       - JAEGER_REPORTER_MAX_QUEUE_SIZE=10000 
       - JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger:5778
     links:
-      - "d"
-      - "e"
+      - lbd
+      - lbe
+
+  lbc:
+    image: dockercloud/haproxy
+    links:
+      - c
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   c:
     build: gen-c/.
+    scale: 1
     environment:
       - JAEGER_SERVICE_NAME=C
       - JAEGER_AGENT_HOST=jaeger
@@ -50,10 +76,18 @@ services:
       - JAEGER_REPORTER_MAX_QUEUE_SIZE=10000 
       - JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger:5778
     links:
-      - "e"
+      - lbe
   
+  lbd:
+    image: dockercloud/haproxy
+    links:
+      - d
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   d:
     build: gen-d/.
+    scale: 1
     environment:
       - JAEGER_SERVICE_NAME=D
       - JAEGER_AGENT_HOST=jaeger
@@ -62,8 +96,16 @@ services:
       - JAEGER_REPORTER_MAX_QUEUE_SIZE=10000 
       - JAEGER_SAMPLER_MANAGER_HOST_PORT=jaeger:5778
   
+  lbe:
+    image: dockercloud/haproxy
+    links:
+      - e
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
   e:
     build: gen-e/.
+    scale: 1
     environment:
       - JAEGER_SERVICE_NAME=E
       - JAEGER_AGENT_HOST=jaeger
