@@ -53,7 +53,7 @@ spec:
             - name: LOCUST_MODE
               value: master
             - name: LOCUST_FILE_URL
-              value: https://raw.githubusercontent.com/orcas-elite/example-setups/master/schematic-abcde/bookinfo/workload/locustfile.py
+              value: https://raw.githubusercontent.com/orcas-elite/example-setups/master/bookinfo/workload/locustfile.py
             - name: TARGET_URL
               value: http://productpage:9080
           ports:
@@ -97,4 +97,4 @@ spec:
             - name: TARGET_URL
               value: http://productpage:9080
             - name: LOCUST_FILE_URL
-              value: https://raw.githubusercontent.com/orcas-elite/example-setups/master/schematic-abcde/bookinfo/workload/locustfile.py
+              value: https://raw.githubusercontent.com/orcas-elite/example-setups/master/bookinfo/workload/locustfile.py
