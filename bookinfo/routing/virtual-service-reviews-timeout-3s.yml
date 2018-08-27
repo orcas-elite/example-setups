@@ -12,4 +12,4 @@ spec:
     route:
     - destination:
         host: reviews
-    timeout: 1s
+    timeout: 3s
