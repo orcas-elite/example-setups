@@ -41,18 +41,9 @@ function builde () {
 	mvn clean
 }
 
-function buildf () {
-	cd gen-f
-	mvn clean package
-	docker build -t orcaselite/schematic-abcde:gen-f .
-	docker push orcaselite/schematic-abcde:gen-f
-	mvn clean
-}
-
 builda &
 buildb &
 buildc &
 buildd &
 builde &
-buildf &
 wait
