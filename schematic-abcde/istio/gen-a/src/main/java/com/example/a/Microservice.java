@@ -1,11 +1,10 @@
 package com.example.a;
 
-
-import java.util.List;
-
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@EnableHystrix
 public class Microservice extends MicroserviceType {
 
     @Override
