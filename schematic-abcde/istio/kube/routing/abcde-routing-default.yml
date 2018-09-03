@@ -33,6 +33,46 @@ spec:
         host: a
         port:
           number: 8080
+  - match:
+    - uri:
+        exact: /b1
+    - uri:
+        exact: /b2
+    route:
+    - destination:
+        host: b
+        port:
+          number: 8080
+  - match:
+    - uri:
+        exact: /c1
+    - uri:
+        exact: /c2
+    route:
+    - destination:
+        host: c
+        port:
+          number: 8080
+  - match:
+    - uri:
+        exact: /d1
+    - uri:
+        exact: /d2
+    route:
+    - destination:
+        host: d
+        port:
+          number: 8080
+  - match:
+    - uri:
+        exact: /e1
+    - uri:
+        exact: /e2
+    route:
+    - destination:
+        host: e
+        port:
+          number: 8080
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
