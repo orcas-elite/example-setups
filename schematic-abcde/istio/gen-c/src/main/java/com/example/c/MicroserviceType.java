@@ -1,11 +1,6 @@
 package com.example.c;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
 public abstract class MicroserviceType {
 	protected String type = "c";
@@ -28,17 +20,18 @@ public abstract class MicroserviceType {
 
 	@RequestMapping(value = "/info", method = GET)
 	public String getInfo() {
-	    return this.type;
+		return this.type;
 	}
-	
+
 	@RequestMapping(value = "/c1", method = GET)
+	@HystrixCommand(fallbackMethod = "fallbackC1")
 	public ResponseEntity<String> c1(@RequestHeader(value="x-request-id", required=false) String xreq,
-			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
-			@RequestHeader(value="x-b3-spanid", required=false) String xspanid,
-			@RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
-			@RequestHeader(value="x-b3-sampled", required=false) String xsampled,
-			@RequestHeader(value="x-b3-flags", required=false) String xflags,
-			@RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
+									 @RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
+									 @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
+									 @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
+									 @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
+									 @RequestHeader(value="x-b3-flags", required=false) String xflags,
+									 @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
 
 		HttpHeaders headers = new HttpHeaders();
 		if(xreq!=null)
@@ -56,28 +49,20 @@ public abstract class MicroserviceType {
 		if(xotspan!=null)
 			headers.set("x-ot-span-context", xotspan);
 		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		
-	ResponseEntity<String> responsee;
-				String responseeStr;
-				try {
-					responsee = restTemplate.exchange("http://e:8080/e2", HttpMethod.GET, request, String.class);
-					responseeStr = responsee.getBody();
-				} catch (Exception e) {
-					responseeStr = "Operation e/e2 failed";
-				}
-		String returnStr = "";
-	returnStr += responseeStr + "<br>";
-		returnStr += "<br>Operation c/c1 executed successfully.";
+
+		ResponseEntity<String> responsee = restTemplate.exchange("http://e:8080/e2", HttpMethod.GET, request, String.class);
+		String returnStr = "Operation c/c1 executed successfully.";
 		return new ResponseEntity<String>(returnStr, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/c2", method = GET)
+	@HystrixCommand(fallbackMethod = "fallbackC2")
 	public ResponseEntity<String> c2(@RequestHeader(value="x-request-id", required=false) String xreq,
-			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
-			@RequestHeader(value="x-b3-spanid", required=false) String xspanid,
-			@RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
-			@RequestHeader(value="x-b3-sampled", required=false) String xsampled,
-			@RequestHeader(value="x-b3-flags", required=false) String xflags,
-			@RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
+									 @RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
+									 @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
+									 @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
+									 @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
+									 @RequestHeader(value="x-b3-flags", required=false) String xflags,
+									 @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
 
 		HttpHeaders headers = new HttpHeaders();
 		if(xreq!=null)
@@ -95,9 +80,31 @@ public abstract class MicroserviceType {
 		if(xotspan!=null)
 			headers.set("x-ot-span-context", xotspan);
 		HttpEntity<String> request = new HttpEntity<String>("parameters", headers);
-		
-		String returnStr = "";
-		returnStr += "<br>Operation c/c2 executed successfully.";
+
+		String returnStr = "Operation c/c2 executed successfully.";
 		return new ResponseEntity<String>(returnStr, HttpStatus.OK);
 	}
+
+	public ResponseEntity<String> fallbackC1(@RequestHeader(value="x-request-id", required=false) String xreq,
+											 @RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
+											 @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
+											 @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
+											 @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
+											 @RequestHeader(value="x-b3-flags", required=false) String xflags,
+											 @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
+		ResponseEntity<String> response = new ResponseEntity<String>("Fallback c/c1", HttpStatus.OK);
+		return response;
+	}
+
+	public ResponseEntity<String> fallbackC2(@RequestHeader(value="x-request-id", required=false) String xreq,
+											 @RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
+											 @RequestHeader(value="x-b3-spanid", required=false) String xspanid,
+											 @RequestHeader(value="x-b3-parentspanid", required=false) String xparentspanid,
+											 @RequestHeader(value="x-b3-sampled", required=false) String xsampled,
+											 @RequestHeader(value="x-b3-flags", required=false) String xflags,
+											 @RequestHeader(value="x-ot-span-context", required=false) String xotspan) {
+		ResponseEntity<String> response = new ResponseEntity<String>("Fallback c/c2", HttpStatus.OK);
+		return response;
+	}
+
 }
