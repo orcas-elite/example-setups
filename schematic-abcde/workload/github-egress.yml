@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: githubusercontent
+spec:
+ type: ExternalName
+ externalName: raw.githubusercontent.com
+ ports:
+ - port: 443
+   name: https
