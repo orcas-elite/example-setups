@@ -18,7 +18,7 @@ class ResponseWriter():
     @staticmethod
     def write_response(response):
         ResponseWriter.logfile.write('%s, %s, %s, %s, %.9f\n' % (datetime.datetime.now().isoformat(), response.status_code, response.reason, response.request.url, response.elapsed.total_seconds()))
-        ResponseWriter.logfile.flush()
+        ResponseWriter.logfile.flush() # Might not be efficient under heavy load
         pass
 
 class WebsiteUser(HttpLocust):
