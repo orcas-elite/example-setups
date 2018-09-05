@@ -1,19 +1,25 @@
 from locust import HttpLocust, TaskSet, task
+import datetime
 
 class UserBehavior(TaskSet):
     @task(1)
     def a1(self):
-        with self.client.get("/a1") as response:
-            self.log_response(response)
+        with self.client.get("/a1", catch_response=True) as response:
+            ResponseWriter.write_response(response)
 
     @task(1)
     def a2(self):
-        with self.client.get("/a2") as response:
-            self.log_response(response)
+        with self.client.get("/a2", catch_response=True) as response:
+            ResponseWriter.write_response(response)
 
-    def log_response(self, response):
-        print('%s, %s, %s, %.12f' % (response.status_code, response.reason, response.request.url, response.elapsed.total_seconds()))
-        # TODO: write to file
+class ResponseWriter():
+    logfile = open("response.log","a")
+
+    @staticmethod
+    def write_response(response):
+        ResponseWriter.logfile.write('%s, %s, %s, %s, %.9f\n' % (datetime.datetime.now().isoformat(), response.status_code, response.reason, response.request.url, response.elapsed.total_seconds()))
+        ResponseWriter.logfile.flush()
+        pass
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
