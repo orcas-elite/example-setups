@@ -5,7 +5,7 @@ declare -a exp=("exp1" "exp2" "exp3")
 # Deploy abcde
 
 # Start locust
-ssh ubuntu@10.0.20.75 'locust --host http://10.0.20.65:31380 -f locustfile.py'
+ssh ubuntu@10.0.20.75 'locust --host http://10.0.20.65:31380 -f ~/example-setups/schematic-abcde/workload/locustfile.py'
 
 for i in "${exp[@]}"
 do
