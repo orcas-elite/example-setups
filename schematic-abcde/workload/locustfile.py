@@ -13,7 +13,7 @@ class UserBehavior(TaskSet):
             ResponseWriter.write_response(response)
 
 class ResponseWriter():
-    logfile = open("response.log","a")
+    logfile = open("/tmp/response.log","a")
 
     @staticmethod
     def write_response(response):
