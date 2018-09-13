@@ -88,7 +88,7 @@ do
 			ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/routing/abcde-routing-default.yml"
 
 			echo "#### Injecting ${faulttypes[$k]} at ${injectionpoints[$j]} ####"
-			ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/experiment/inject-fault-${injectionpoints[$j]}-${faulttypes[$k]}.yml"
+			ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/experiment/faultinjection/inject-fault-${injectionpoints[$j]}-${faulttypes[$k]}.yml"
 
 			# Start locust in screen
 			echo "Starting Locust..."
