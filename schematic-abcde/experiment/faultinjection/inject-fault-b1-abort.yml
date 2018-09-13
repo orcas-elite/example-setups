@@ -1,10 +1,10 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: e
+  name: b
 spec:
   hosts:
-  - e
+  - b
   http:
   - fault:
       abort:
@@ -15,7 +15,7 @@ spec:
         prefix: "/b1"
     route:
     - destination:
-        host: e
+        host: b
   - route:
     - destination:
-        host: e
+        host: b

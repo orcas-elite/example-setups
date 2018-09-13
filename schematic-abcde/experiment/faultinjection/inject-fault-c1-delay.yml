@@ -1,10 +1,10 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: e
+  name: c
 spec:
   hosts:
-  - e
+  - c
   http:
   - fault:
       delay:
@@ -15,7 +15,7 @@ spec:
         prefix: "/c1"
     route:
     - destination:
-        host: e
+        host: c
   - route:
     - destination:
-        host: e
+        host: c
