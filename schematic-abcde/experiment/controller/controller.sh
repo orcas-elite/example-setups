@@ -108,6 +108,7 @@ do
 
 			# Save locust log
 			echo "Copying results..."
+			mkdir $dirname/${injectionpoints[$j]}-${faulttypes[$k]}
 			scp chaos-loaddriver:/tmp/response.log $dirname/.
 			echo "Copying results... done"
 
