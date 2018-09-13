@@ -61,7 +61,6 @@ do
 	done
 	dirname=${dirname%?} # Remove trailing "-"
 	dirname=experiments/${dirname}
-	echo $dirname
 	mkdir $dirname
 
 	# Set hystrix configurations for all methods
@@ -78,6 +77,7 @@ do
 	done
 
 	echo "###################### Starting experiment no. $i ######################"
+	echo $dirname
 	date --iso-8601=s
 
 	# TODO: for loop for all 7*2 faults to be injected
