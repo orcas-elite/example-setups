@@ -3,38 +3,40 @@
 services=("a1" "a2" "b1" "b2" "c1" "c2")
 hystrix=(false false false false false false) # Default hystrix configuration
 injectionpoints=("b1" "c1" "c2" "d1" "e1" "e2")
+faulttypes=("delay" "abort")
 # TODO: set apache file location
 hystrixconfig="/tmp/hystrixconfig"
 
+mkdir experiments
+
 # Deploy abcde
-echo "Deploying abcde..."
-ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/abcde.yml"
-ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/routing/abcde-routing-default.yml"
-echo "Waiting 30s for abcde to be ready..."
-sleep 30
-echo "Deploying abcde... done"
+#echo "Deploying abcde..."
+#ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/abcde.yml"
+#ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/routing/abcde-routing-default.yml"
+#echo "Waiting 30s for abcde to be ready..."
+#sleep 30
+#echo "Deploying abcde... done"
 
 # Warm up abcde to prevent first few calls from failing
-echo "Warming up abcde..."
-echo "Starting Locust..."
-ssh chaos-loaddriver screen -S locust -d -m "locust -f ~/example-setups/schematic-abcde/workload/locustfile.py --host http://chaos-kube:31380"
-echo "Waiting 10s for locust to be ready..."
-sleep 10
-echo "Starting Locust... done"
-echo "Starting locust workload..."
-curl -X POST --data "locust_count=100&hatch_rate=10" http://chaos-loaddriver:8089/swarm
-echo "Starting locust workload... done"
-sleep 10
-echo "Stopping locust..."
-curl http://chaos-loaddriver:8089/stop
-echo "Stopping locust... done"
-echo "Cleaning up..."
-# Stop locust screen
-ssh chaos-loaddriver screen -X -S locust quit
-ssh chaos-loaddriver 'rm /tmp/response.log'
-sleep 10
-echo "Cleaning up... done"
-echo "Warming up abcde... done"
+#echo "Warming up abcde..."
+#echo "Starting Locust..."
+#ssh chaos-loaddriver screen -S locust -d -m "locust -f ~/example-setups/schematic-abcde/workload/locustfile.py --host http://chaos-kube:31380"
+#echo "Waiting 10s for locust to be ready..."
+#sleep 10
+#echo "Starting Locust... done"
+#echo "Starting locust workload..."
+#curl -X POST --data "locust_count=100&hatch_rate=10" http://chaos-loaddriver:8089/swarm
+#echo "Starting locust workload... done"
+#sleep 10
+#echo "Stopping locust..."
+#curl http://chaos-loaddriver:8089/stop
+#echo "Stopping locust... done"
+#echo "Cleaning up..."
+#ssh chaos-loaddriver screen -X -S locust quit
+#ssh chaos-loaddriver 'rm /tmp/response.log'
+#sleep 10
+#echo "Cleaning up... done"
+#echo "Warming up abcde... done"
 
 # Start experiments
 # Iterate through all combinations ( 2^no. of methods with hystrix)
@@ -53,11 +55,13 @@ do
 	done
 
 	dirname=""
-	for ((j=0; j<$((${#services[@]})); j++))
+	for ((j=0; j<${#services[@]}; j++))
 	do
-		dirname=$dir${services[$j]}${hystrix[$j]}-
+		dirname=$dirname${services[$j]}${hystrix[$j]}-
 	done
 	dirname=${dirname%?} # Remove trailing "-"
+	dirname=experiments/${dirname}
+	echo $dirname
 	mkdir $dirname
 
 	# Set hystrix configurations for all methods
@@ -77,9 +81,9 @@ do
 	date --iso-8601=s
 
 	# TODO: for loop for all 7*2 faults to be injected
-	for ip in ${#injectionpoints[@]}
+	for ((j=0; j<${#injectionpoints[@]}; j++))
 	do
-		echo "#### Injecting fault at $ip ####"
+		echo "#### Injecting fault at ${injectionpoints[$j]} ####"
 	done
 
 	continue # TODO: remove
