@@ -25,7 +25,7 @@ public abstract class MicroserviceType {
 	}
 
 	@RequestMapping(value = "/a1", method = GET)
-	@HystrixCommand(fallbackMethod = "fallbackA1")
+	@HystrixCommand(commandKey = "a1", fallbackMethod = "fallbackA1")
 	public ResponseEntity<String> a1(@RequestHeader(value="x-request-id", required=false) String xreq,
 			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
 			@RequestHeader(value="x-b3-spanid", required=false) String xspanid,
@@ -58,7 +58,7 @@ public abstract class MicroserviceType {
 			return new ResponseEntity<String>(returnStr, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/a2", method = GET)
-	@HystrixCommand(fallbackMethod = "fallbackA2")
+	@HystrixCommand(commandKey = "a2", fallbackMethod = "fallbackA2")
 	public ResponseEntity<String> a2(@RequestHeader(value="x-request-id", required=false) String xreq,
 			@RequestHeader(value="x-b3-traceid", required=false) String xtraceid,
 			@RequestHeader(value="x-b3-spanid", required=false) String xspanid,
