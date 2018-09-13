@@ -10,7 +10,7 @@ mkdir experiments
 
 # Deploy abcde
 echo "Deploying abcde..."
-ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/chaos-controller-egress"
+ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/chaos-controller-egress.yml"
 ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/abcde.yml"
 ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/routing/abcde-routing-default.yml"
 echo "Waiting 30s for abcde to be ready..."
