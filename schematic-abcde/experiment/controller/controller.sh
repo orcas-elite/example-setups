@@ -120,9 +120,10 @@ do
 	sleep 10
 	echo "Cleaning up... done"
 
-	# For loop for all 7*2 faults to be injected
+	# Iterate through all injection locations
 	for ((j=0; j<${#injectionLocations[@]}; j++))
 	do
+		# Iterate through all types of faults to be injected
 		for ((k=0; k<${#faultTypes[@]}; k++))
 		do
 			# Reset routing to default value before injecting new fault
