@@ -64,7 +64,7 @@ do
 		configurationDir=$configurationDir${hystrixLocations[$j]}${hystrixEnabled[$j]}-
 	done
 	configurationDir=${configurationDir%?} # Remove trailing "-"
-	configurationDir=experimentDir/${configurationDir}
+	configurationDir=${experimentDir}/${configurationDir}
 	mkdir $configurationDir
 	echo $configurationDir
 
