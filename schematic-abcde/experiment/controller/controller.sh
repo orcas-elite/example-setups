@@ -70,8 +70,14 @@ do
 		if ${hystrixEnabled[$j]};
 		then
 			echo hystrix.command.${hystrixLocations[$j]}.fallback.enabled=true >> $hystrixproperties
+			echo hystrix.command.${hystrixLocations[$j]}.execution.timeout.enabled=true >> $hystrixproperties
+			echo hystrix.command.${hystrixLocations[$j]}.circuitBreaker.enabled=true >> $hystrixproperties
+			echo hystrix.command.${hystrixLocations[$j]}.circuitBreaker.requestVolumeThreshold=1 >> $hystrixproperties
 		else
 			echo hystrix.command.${hystrixLocations[$j]}.fallback.enabled=false >> $hystrixproperties
+			echo hystrix.command.${hystrixLocations[$j]}.execution.timeout.enabled=false >> $hystrixproperties
+			echo hystrix.command.${hystrixLocations[$j]}.circuitBreaker.enabled=false >> $hystrixproperties
+			echo hystrix.command.${hystrixLocations[$j]}.circuitBreaker.requestVolumeThreshold=1 >> $hystrixproperties
 		fi
 	done
 
