@@ -80,6 +80,9 @@ do
 			echo hystrix.command.${hystrixLocations[$j]}.circuitBreaker.requestVolumeThreshold=1 >> $hystrixproperties
 		fi
 	done
+	echo "Waiting 60s for hystrix to poll configurations..."
+	sleep 60
+	echo "Waiting 60s for hystrix to poll configurations... done"
 
 	echo "###################### Starting experiment no. $i ######################"
 	echo $dirname
@@ -139,11 +142,12 @@ do
 			sleep 10
 			echo "Starting Locust... done"
 
-			# Run experiment
+			# Start workload
 			echo "Starting locust workload..."
 			curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm
 			echo "Starting locust workload... done"
 			sleep 60
+			# Stop workload
 			echo "Stopping locust..."
 			curl http://chaos-loaddriver:8089/stop
 			echo "Stopping locust... done"
