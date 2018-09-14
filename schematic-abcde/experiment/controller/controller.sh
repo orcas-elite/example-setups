@@ -25,9 +25,9 @@ echo "Waiting 10s for locust to be ready..."
 sleep 10
 echo "Starting Locust... done"
 echo "Starting locust workload..."
-curl -X POST --data "locust_count=100&hatch_rate=10" http://chaos-loaddriver:8089/swarm
+curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm
 echo "Starting locust workload... done"
-sleep 30
+sleep 60
 echo "Stopping locust..."
 curl http://chaos-loaddriver:8089/stop
 echo "Stopping locust... done"
@@ -99,9 +99,9 @@ do
 
 	# Run experiment
 	echo "Starting locust workload..."
-	curl -X POST --data "locust_count=100&hatch_rate=10" http://chaos-loaddriver:8089/swarm
+	curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm
 	echo "Starting locust workload... done"
-	sleep 30
+	sleep 60
 	echo "Stopping locust..."
 	curl http://chaos-loaddriver:8089/stop
 	echo "Stopping locust... done"
@@ -140,9 +140,9 @@ do
 
 			# Run experiment
 			echo "Starting locust workload..."
-			curl -X POST --data "locust_count=100&hatch_rate=10" http://chaos-loaddriver:8089/swarm
+			curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm
 			echo "Starting locust workload... done"
-			sleep 30
+			sleep 60
 			echo "Stopping locust..."
 			curl http://chaos-loaddriver:8089/stop
 			echo "Stopping locust... done"
