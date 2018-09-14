@@ -2,9 +2,9 @@
 
 hystrixLocations=("a1" "a2" "b1" "c1")
 hystrixEnabled=(false false false false) # Default hystrix configuration
-injectionLocations=("b1" "c1" "c2" "d1" "e1" "e2") # TODO: remove some points
+injectionLocations=("b1" "c1" "c2" "d1" "e1" "e2")
 faultTypes=("delay" "abort")
-hystrixconfig="/var/www/html/hystrixconfig"
+hystrixproperties="/var/www/html/hystrix.properties"
 
 mkdir experiments
 
@@ -64,16 +64,16 @@ do
 	mkdir $dirname
 
 	# Set hystrix configurations for all methods
-	truncate -s 0 $hystrixconfig # Delete file content
+	truncate -s 0 $hystrixproperties # Delete file content
 	for ((j=0; j<${#hystrixLocations[@]}; j++))
 	do
 		if ${hystrixEnabled[$j]};
 		then
-			echo hystrix.command.${hystrixLocations[$j]}.execution.timeout.enabled=true >> $hystrixconfig
+			echo hystrix.command.${hystrixLocations[$j]}.execution.timeout.enabled=true >> $hystrixproperties
 		else
-			echo hystrix.command.${hystrixLocations[$j]}.execution.timeout.enabled=false >> $hystrixconfig
+			echo hystrix.command.${hystrixLocations[$j]}.execution.timeout.enabled=false >> $hystrixproperties
 		fi
-		echo hystrix.command.${hystrixLocations[$j]}.execution.isolation.thread.timeoutInMilliseconds=2000 >> $hystrixconfig
+		echo hystrix.command.${hystrixLocations[$j]}.execution.isolation.thread.timeoutInMilliseconds=2000 >> $hystrixproperties
 	done
 
 	echo "###################### Starting experiment no. $i ######################"

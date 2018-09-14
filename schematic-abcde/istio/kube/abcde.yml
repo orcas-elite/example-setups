@@ -29,7 +29,7 @@ spec:
       - name: a
         image: orcaselite/schematic-abcde:gen-a
         command: ["java"]
-        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrixconfig", "-jar", "a-1.0.jar"]
+        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrix.properties", "-jar", "a-1.0.jar"]
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -64,7 +64,7 @@ spec:
       - name: b
         image: orcaselite/schematic-abcde:gen-b
         command: ["java"]
-        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrixconfig", "-jar", "b-1.0.jar"]
+        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrix.properties", "-jar", "b-1.0.jar"]
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -99,7 +99,7 @@ spec:
       - name: c
         image: orcaselite/schematic-abcde:gen-c
         command: ["java"]
-        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrixconfig", "-jar", "c-1.0.jar"]
+        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrix.properties", "-jar", "c-1.0.jar"]
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -134,7 +134,7 @@ spec:
       - name: d
         image: orcaselite/schematic-abcde:gen-d
         command: ["java"]
-        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrixconfig", "-jar", "d-1.0.jar"]
+        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrix.properties", "-jar", "d-1.0.jar"]
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -169,7 +169,7 @@ spec:
       - name: e
         image: orcaselite/schematic-abcde:gen-e
         command: ["java"]
-        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrixconfig", "-jar", "e-1.0.jar"]
+        args: ["-Darchaius.configurationSource.additionalUrls=http://chaos-controller/hystrix.properties", "-jar", "e-1.0.jar"]
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
