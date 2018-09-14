@@ -153,6 +153,7 @@ do
 			# Stop locust screen
 			ssh chaos-loaddriver screen -X -S locust quit
 			ssh chaos-loaddriver 'rm /tmp/response.log'
+			ssh chaos-kube "kubectl delete -f ~/example-setups/schematic-abcde/experiment/faultinjection/inject-fault-${injectionLocations[$j]}-${faultTypes[$k]}.yml"
 			sleep 10
 			echo "Cleaning up... done"
 		done
