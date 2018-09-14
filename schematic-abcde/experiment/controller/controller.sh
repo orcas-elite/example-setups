@@ -69,11 +69,10 @@ do
 	do
 		if ${hystrixEnabled[$j]};
 		then
-			echo hystrix.command.${hystrixLocations[$j]}.execution.timeout.enabled=true >> $hystrixproperties
+			echo hystrix.command.${hystrixLocations[$j]}.fallback.enabled=true >> $hystrixproperties
 		else
-			echo hystrix.command.${hystrixLocations[$j]}.execution.timeout.enabled=false >> $hystrixproperties
+			echo hystrix.command.${hystrixLocations[$j]}.fallback.enabled=false >> $hystrixproperties
 		fi
-		echo hystrix.command.${hystrixLocations[$j]}.execution.isolation.thread.timeoutInMilliseconds=2000 >> $hystrixproperties
 	done
 
 	echo "###################### Starting experiment no. $i ######################"
