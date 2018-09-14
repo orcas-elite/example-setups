@@ -6,7 +6,7 @@ injectionLocations=("b1" "c1" "c2" "d1" "e1" "e2")
 faultTypes=("delay" "abort")
 hystrixproperties="/var/www/html/hystrix.properties"
 
-mkdir experiments
+mkdir experiments-$(date --iso-8601=s)
 
 # Deploy abcde
 echo "Deploying abcde..."
