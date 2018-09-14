@@ -26,11 +26,11 @@ echo "Waiting 10s for locust to be ready..."
 sleep 10
 echo "Starting Locust... done"
 echo "Starting locust workload..."
-curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm
+curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm >/dev/null
 echo "Starting locust workload... done"
 sleep 60
 echo "Stopping locust..."
-curl http://chaos-loaddriver:8089/stop
+curl http://chaos-loaddriver:8089/stop >/dev/null
 echo "Stopping locust... done"
 echo "Cleaning up..."
 ssh chaos-loaddriver screen -X -S locust quit
@@ -103,11 +103,11 @@ do
 
 	# Run experiment
 	echo "Starting locust workload..."
-	curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm
+	curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm >/dev/null
 	echo "Starting locust workload... done"
 	sleep 60
 	echo "Stopping locust..."
-	curl http://chaos-loaddriver:8089/stop
+	curl http://chaos-loaddriver:8089/stop >/dev/null
 	echo "Stopping locust... done"
 
 	# Save locust log
@@ -145,12 +145,12 @@ do
 
 			# Start workload
 			echo "Starting locust workload..."
-			curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm
+			curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm >/dev/null
 			echo "Starting locust workload... done"
 			sleep 60
 			# Stop workload
 			echo "Stopping locust..."
-			curl http://chaos-loaddriver:8089/stop
+			curl http://chaos-loaddriver:8089/stop >/dev/null
 			echo "Stopping locust... done"
 
 			# Save locust log
