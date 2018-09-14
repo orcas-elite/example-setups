@@ -6,7 +6,8 @@ injectionLocations=("b1" "c1" "c2" "d1" "e1" "e2")
 faultTypes=("delay" "abort")
 hystrixproperties="/var/www/html/hystrix.properties"
 
-mkdir experiments-$(date --iso-8601=s)
+experimentDir=experiment-$(date --iso-8601=s)
+mkdir $experimentDir
 
 # Deploy abcde
 echo "Deploying abcde..."
@@ -42,6 +43,9 @@ echo "Warming up abcde... done"
 # Iterate through all combinations ( 2^no. of methods with hystrix)
 for ((i=0; i<$((2 ** ${#hystrixLocations[@]})); i++))
 do
+	echo "###################### Starting experiment no. $i ######################"
+	date --iso-8601=s
+
 	# Derive from value of $i about which methods should have hystrix enabled.
 	# This uses bitwise AND operation to mask bits in the binary value of $i and determines if hystrix of each method should be enabled.
 	# This uses decrementing for loop because an incrementing for loop with $((x)) creates a bash subshell which does not allow the value of hystrix array to be modified from in side the loop.
@@ -54,14 +58,15 @@ do
 		fi
 	done
 
-	dirname=""
+	configurationDir=""
 	for ((j=0; j<${#hystrixLocations[@]}; j++))
 	do
-		dirname=$dirname${hystrixLocations[$j]}${hystrixEnabled[$j]}-
+		configurationDir=$configurationDir${hystrixLocations[$j]}${hystrixEnabled[$j]}-
 	done
-	dirname=${dirname%?} # Remove trailing "-"
-	dirname=experiments/${dirname}
-	mkdir $dirname
+	configurationDir=${configurationDir%?} # Remove trailing "-"
+	configurationDir=experimentDir/${configurationDir}
+	mkdir $configurationDir
+	echo $configurationDir
 
 	# Set hystrix configurations for all methods
 	truncate -s 0 $hystrixproperties # Delete file content
@@ -83,10 +88,6 @@ do
 	echo "Waiting 60s for hystrix to poll configurations..."
 	sleep 60
 	echo "Waiting 60s for hystrix to poll configurations... done"
-
-	echo "###################### Starting experiment no. $i ######################"
-	echo $dirname
-	date --iso-8601=s
 
 	# Reset routing to default value before injecting new fault
 	ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/routing/abcde-routing-default.yml"
@@ -111,9 +112,9 @@ do
 
 	# Save locust log
 	echo "Copying results..."
-	injectionOutputDir=$dirname/nofault
-	mkdir $injectionOutputDir
-	scp chaos-loaddriver:/tmp/response.log $injectionOutputDir/.
+	injectionDir=$configurationDir/nofault
+	mkdir $injectionDir
+	scp chaos-loaddriver:/tmp/response.log $injectionDir/.
 	echo "Copying results... done"
 
 	echo "Cleaning up..."
@@ -154,9 +155,9 @@ do
 
 			# Save locust log
 			echo "Copying results..."
-			injectionOutputDir=$dirname/${injectionLocations[$j]}-${faultTypes[$k]}
-			mkdir $injectionOutputDir
-			scp chaos-loaddriver:/tmp/response.log $injectionOutputDir/.
+			injectionDir=$configurationDir/${injectionLocations[$j]}-${faultTypes[$k]}
+			mkdir $injectionDir
+			scp chaos-loaddriver:/tmp/response.log $injectionDir/.
 			echo "Copying results... done"
 
 			echo "Cleaning up..."
