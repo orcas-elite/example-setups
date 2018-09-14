@@ -157,7 +157,7 @@ do
 			echo "Copying results..."
 			injectionDir=$configurationDir/${injectionLocations[$j]}-${faultTypes[$k]}
 			mkdir $injectionDir
-			scp chaos-loaddriver:/tmp/response.log $injectionDir/.
+			scp chaos-loaddriver:/tmp/response.log ${injectionDir}/.
 			echo "Copying results... done"
 
 			echo "Cleaning up..."
