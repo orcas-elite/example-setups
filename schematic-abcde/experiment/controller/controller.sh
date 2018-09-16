@@ -105,7 +105,7 @@ do
 	echo "Starting locust workload..."
 	curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm >/dev/null
 	echo "Starting locust workload... done"
-	sleep 60
+	sleep 120
 	echo "Stopping locust..."
 	curl http://chaos-loaddriver:8089/stop >/dev/null
 	echo "Stopping locust... done"
@@ -147,7 +147,7 @@ do
 			echo "Starting locust workload..."
 			curl -X POST --data "locust_count=50&hatch_rate=1" http://chaos-loaddriver:8089/swarm >/dev/null
 			echo "Starting locust workload... done"
-			sleep 60
+			sleep 120
 			# Stop workload
 			echo "Stopping locust..."
 			curl http://chaos-loaddriver:8089/stop >/dev/null
