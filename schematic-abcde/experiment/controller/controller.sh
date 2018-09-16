@@ -15,7 +15,7 @@ ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/cha
 ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/abcde.yml"
 ssh chaos-kube "kubectl apply -f ~/example-setups/schematic-abcde/istio/kube/routing/abcde-routing-default.yml"
 echo "Waiting 30s for abcde to be ready..."
-sleep 30
+sleep 60
 echo "Deploying abcde... done"
 
 # Warm up abcde to prevent first few calls from failing
